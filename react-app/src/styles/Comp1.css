@@ -3,7 +3,8 @@
     margin-left: auto;
     margin-right: auto;
     width: 800px;
-    background-color: #a9f1d7;
+    background-color: rgba(197, 220, 207, 0.42);
     padding: 50px;
     border-radius: 10px;
+    border: 2px solid rgba(48, 56, 48, 0.42);
 }

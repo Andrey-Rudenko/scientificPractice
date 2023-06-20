@@ -5,7 +5,12 @@ import {useForm} from "react-hook-form";
 import {DevTool} from '@hookform/devtools'
 
 const Comp1 = () => {
-    const {register, handleSubmit, control, formState: {errors}} = useForm({
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+
+    const {register, handleSubmit, reset, control, formState: {errors}} = useForm({
         defaultValues: {
             Height_N: 200,
             Width_M: 400,
@@ -14,7 +19,6 @@ const Comp1 = () => {
             speed_sound_c: 1500,
             damping_factor_μ: 0.018,
             scatt: 2,
-            Scattering_σ_b: 0.2
         }
     });
     const onSubmit = data => {
@@ -98,17 +102,6 @@ const Comp1 = () => {
                 message: "1..10"
             }
         },
-        Scattering_σ_b: {
-            required: "Поле обязательно",
-            min: {
-                value: 0,
-                message: "0..1 м^(-1)"
-            },
-            max: {
-                value: 1,
-                message: "0..1 м^(-1)"
-            }
-        },
     }
     return (
         <div className="inputForm">
@@ -175,18 +168,61 @@ const Comp1 = () => {
                             helperText={errors?.scatt && errors.scatt?.message}
                         />
                     </Grid>
-                    <Grid item xs={3}>
-                        <TextField
-                            label="Коэффициент рассеяния в основной среде (σ_b)"
-                            {...register('Scattering_σ_b', registerOptions.Scattering_σ_b)}
-                            error={!!errors.Scattering_σ_b}
-                            helperText={errors?.Scattering_σ_b && errors.Scattering_σ_b?.message}
-                        />
-                    </Grid>
                 </Grid>
                 <Button variant="contained" color="primary" type="submit">
                     Отправить
                 </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        reset({
+                            Height_N: "",
+                            Width_M: "",
+                            step_h: "",
+                            monte_karlo_L: "",
+                            speed_sound_c: "",
+                            damping_factor_μ: "",
+                            scatt: "",
+                        })
+                    }
+
+                }
+                >отчистить поля</Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        reset({
+                            Height_N: 200,
+                            Width_M: 400,
+                            step_h: 0.4,
+                            monte_karlo_L: 100,
+                            speed_sound_c: 1500,
+                            damping_factor_μ: 0.018,
+                            scatt: 2,
+                        })
+                    }
+
+                    }
+                >Значения по умолчанию</Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        reset({
+                            Height_N: Math.floor(getRandomArbitrary(50, 500)),
+                            Width_M: Math.floor(getRandomArbitrary(50, 500)),
+                            step_h: (getRandomArbitrary(0.001, 1)).toFixed(4),
+                            monte_karlo_L: Math.floor(getRandomArbitrary(1, 100)),
+                            speed_sound_c: Math.floor(getRandomArbitrary(200, 6000)),
+                            damping_factor_μ: (getRandomArbitrary(0, 1)).toFixed(4),
+                            scatt: Math.floor(getRandomArbitrary(1, 10)),
+                        })
+                    }
+
+                    }
+                >Случайные значения</Button>
             </form>
             <DevTool control={control}/>
         </div>
