@@ -4,9 +4,8 @@ import '../styles/Comp1.css'
 import {useForm} from "react-hook-form";
 import {DevTool} from '@hookform/devtools'
 
-
 const Comp1 = () => {
-    const {register, handleSubmit, control} = useForm({
+    const {register, handleSubmit, control, formState: {errors}} = useForm({
         defaultValues: {
             Height_N: 200,
             Width_M: 400,
@@ -21,7 +20,96 @@ const Comp1 = () => {
     const onSubmit = data => {
         console.log(data);
     }
-
+    const registerOptions = {
+        Height_N: {
+            required: "Поле обязательно",
+            min: {
+                value: 50,
+                message: "50..500 м"
+            },
+            max: {
+                value: 500,
+                message: "50..500 м"
+            }
+        },
+        Width_M: {
+            required: "Поле обязательно",
+            min: {
+                value: 50,
+                message: "50..500 м"
+            },
+            max: {
+                value: 500,
+                message: "50..500 м"
+            }
+        },
+        step_h: {
+            required: "Поле обязательно",
+            min: {
+                value: 0.001,
+                message: "0.001..1 м"
+            },
+            max: {
+                value: 1,
+                message: "0.001..1 м"
+            }
+        },
+        monte_karlo_L: {
+            required: "Поле обязательно",
+            min: {
+                value: 1,
+                message: "1..100"
+            },
+            max: {
+                value: 100,
+                message: "1..100"
+            }
+        },
+        speed_sound_c: {
+            required: "Поле обязательно",
+            min: {
+                value: 200,
+                message: "200..6000 м/с"
+            },
+            max: {
+                value: 6000,
+                message: "200..6000 м/с"
+            }
+        },
+        damping_factor_μ: {
+            required: "Поле обязательно",
+            min: {
+                value: 0,
+                message: "0..1 м^(-1)"
+            },
+            max: {
+                value: 1,
+                message: "0..1 м^(-1)"
+            }
+        },
+        scatt: {
+            required: "Поле обязательно",
+            min: {
+                value: 1,
+                message: "1..10"
+            },
+            max: {
+                value: 10,
+                message: "1..10"
+            }
+        },
+        Scattering_σ_b: {
+            required: "Поле обязательно",
+            min: {
+                value: 0,
+                message: "0..1 м^(-1)"
+            },
+            max: {
+                value: 1,
+                message: "0..1 м^(-1)"
+            }
+        },
+    }
     return (
         <div className="inputForm">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -30,73 +118,78 @@ const Comp1 = () => {
                         <TextField
                             label="Высота области (N)"
                             type="number"
-                            helperText="Some important text"
-                            {...register('Height_N', {required: "Email is required", min:50.0, max:500.0})}
-
+                            {...register('Height_N', registerOptions.Height_N)}
+                            error={!!errors.Height_N}
+                            helperText={errors?.Height_N && errors.Height_N?.message}
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
                             label="Ширина области (M)"
                             type="number"
-                            helperText="Some important text"
-                            {...register('Width_M', {required: true, min:50.0, max:500.0})}
+                            {...register('Width_M', registerOptions.Width_M)}
+                            error={!!errors.Width_M}
+                            helperText={errors?.Width_M && errors.Width_M?.message}
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
                             label="Шаг по области (h)"
-                            helperText="Some important text"
-                            {...register('step_h', {required: true, min:0.001, max:1.0})}
+                            {...register('step_h', registerOptions.step_h)}
+                            error={!!errors.step_h}
+                            helperText={errors?.step_h && errors.step_h?.message}
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
                             label="Число испытаний Монте-Карло (L)"
                             type="number"
-                            helperText="Some important text"
-                            {...register('monte_karlo_L', {required: true, min:1.0, max:100.0})}
+                            {...register('monte_karlo_L', registerOptions.monte_karlo_L)}
+                            error={!!errors.monte_karlo_L}
+                            helperText={errors?.monte_karlo_L && errors.monte_karlo_L?.message}
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
                             label="Скорость звука (с)"
                             type="number"
-                            helperText="Some important text"
-                            {...register('speed_sound_c', {required: true, min:200.0, max:6000.0})}
-
+                            {...register('speed_sound_c', registerOptions.speed_sound_c)}
+                            error={!!errors.speed_sound_c}
+                            helperText={errors?.speed_sound_c && errors.speed_sound_c?.message}
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
                             label="Коэффициент затухания (μ)"
-                            helperText="Some important text"
-                            {...register('damping_factor_μ', {required: true, min:0.0, max:1.0})}
+                            {...register('damping_factor_μ', registerOptions.damping_factor_μ)}
+                            error={!!errors.damping_factor_μ}
+                            helperText={errors?.damping_factor_μ && errors.damping_factor_μ?.message}
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
                             label="Количество актов рассеяния (scatt)"
                             type="number"
-                            helperText="Some important text"
-                            {...register('scatt', {required: true, min:1.0, max:10.0})}
+                            {...register('scatt', registerOptions.scatt)}
+                            error={!!errors.scatt}
+                            helperText={errors?.scatt && errors.scatt?.message}
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
                             label="Коэффициент рассеяния в основной среде (σ_b)"
-                            helperText="Some important text"
-                            {...register('Scattering_σ_b', {required: true, min:0.0, max:1.0})}
+                            {...register('Scattering_σ_b', registerOptions.Scattering_σ_b)}
+                            error={!!errors.Scattering_σ_b}
+                            helperText={errors?.Scattering_σ_b && errors.Scattering_σ_b?.message}
                         />
                     </Grid>
                 </Grid>
-                <Button variant="contained" color="secondary" type="submit">
+                <Button variant="contained" color="primary" type="submit">
                     Отправить
                 </Button>
             </form>
-            <DevTool control={control} />
+            <DevTool control={control}/>
         </div>
     );
 };
-
 export default Comp1;
