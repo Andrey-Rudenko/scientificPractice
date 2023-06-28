@@ -16,6 +16,9 @@
 .buttons {
     margin-bottom: 50px;
 }
-.canvasImg {
-    border: 5px solid red;
+.blockImg {
+    display: inline-block;
+    border-radius: 10px;
+    border: 2px solid rgba(48, 56, 48, 0.42);
+    padding: 10px;
 }
