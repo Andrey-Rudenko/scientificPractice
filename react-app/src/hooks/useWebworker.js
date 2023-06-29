@@ -28,3 +28,25 @@ export const useWebworker = (fn) => {
     }
 }
 
+export const useDisposableWebworker = (fn) => {
+    const [result, setResult] = useState(null)
+
+    const run = (value) => {
+        const worker = new Worker(
+            URL.createObjectURL(new Blob([`(${workerHandler})(${fn})`]))
+        )
+        worker.onmessage = (event) => {
+            setResult(event.data)
+            worker.terminate()
+        }
+        worker.onerror = (error) => {
+            worker.terminate()
+        }
+        worker.postMessage(value)
+    }
+
+    return {
+        result,
+        run,
+    }
+}

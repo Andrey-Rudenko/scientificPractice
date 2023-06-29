@@ -5,37 +5,15 @@ import {useForm} from "react-hook-form";
 import Tooltip from '@mui/material/Tooltip';
 import CanvasComp from "./CanvasComp";
 import * as THREE from 'three';
+import FormControl from 'react-bootstrap/FormControl'
 
-import {useWebworker} from '../hooks/use-webworker';
-
+import {useWebworker} from '../hooks/useWebworker'
+import {useFibonacci} from '../hooks/useFibonacci'
 
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-function navFunction(N, M, H, L, c, mu, scatt) {
-    const res = [];
-    for (let i = 0; i < N; i++) {
-        const row = [];
-        for (let j = 0; j < M; j++) {
-            row.push(Math.floor(Math.random() * 10));
-        }
-        res.push(row);
-    }
-    console.log(N, M, H, L, c, mu, scatt);
-    return res;
-}
-
-
-//
-
-
-let step_h = 0.4
-let monte_karlo_L = 100
-let speed_sound_c = 1500
-let damping_factor_mu = 0.018
-let scatt = 2
-let dataForCanvas = navFunction(200, 400, step_h, monte_karlo_L, speed_sound_c, damping_factor_mu, scatt)
 const Comp1 = () => {
         const [widthValue, setWidthValue] = useState(400);
         const [heightValue, setHeightValue] = useState(200);
@@ -50,33 +28,15 @@ const Comp1 = () => {
                 scatt: 2,
             }
         });
+        const {result, run} = useFibonacci()
 
-        const {result, run} = useWebworker((data) => {
-
-            let N = data.Height_N
-            let M = data.Width_M
-            let H = data.step_h
-            let L = data.monte_karlo_L
-            let c = data.speed_sound_c
-            let mu = data.damping_factor_mu
-            let scatt = data.scatt
-
-            const res = [];
-            for (let i = 0; i < N; i++) {
-                const row = [];
-                for (let j = 0; j < M; j++) {
-                    row.push(Math.floor(Math.random() * 10));
-                }
-                res.push(row);
-            }
-            console.log(res);
-            return res;
-        })
+        const getNthFibonacciNumber = (value) => {
+            run(value)
+        }
         const onSubmit = data => {
             setHeightValue(data.Height_N);
             setWidthValue(data.Width_M);
-            run(data);
-            // dataForCanvas = navFunction(data.Height_N, data.Width_M, data.step_h, data.monte_karlo_L, data.speed_sound_c, data.damping_factor_mu, data.scatt);
+            getNthFibonacciNumber(data)
         }
         const registerOptions = {
             Height_N: {
@@ -304,10 +264,12 @@ const Comp1 = () => {
 
 
                 </form>
-                <div className="blockImg">
-                    {/*<CanvasComp data={result} height={heightValue} width={widthValue}/>*/}
-                    <p>{result}</p>
-                </div>
+                {result && (
+                    <div className="blockImg">
+                        <CanvasComp data={result} height={heightValue} width={widthValue}/>
+                    </div>
+                )}
+
             </div>
         );
     }
